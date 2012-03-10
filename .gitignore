@@ -1,0 +1,8 @@
+*.class
+*.jar
+*.suite
+*.metadata
+*.sym
+*.nblh~
+/build/
+
