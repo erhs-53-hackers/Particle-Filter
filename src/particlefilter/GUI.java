@@ -20,7 +20,7 @@ import sun.awt.image.OffScreenImage;
 public class GUI extends javax.swing.JFrame {
     ParticleFilter filter;
     Particle robot;
-    Point[] landmarks = new Point[]{new Point(20f, 20f), new Point(80f, 80f), new Point(20f, 80f), new Point(80f, 20f)};
+    Point[] landmarks = new Point[]{new Point(5, 20f), new Point(225, 40f), new Point(225f, 400f), new Point(5f, 80f), new Point(700-10f,40f)};
     private Image image;
     private Graphics2D graphics;
     int width = 700, height = 500;
@@ -65,8 +65,15 @@ public class GUI extends javax.swing.JFrame {
         }
         graphics.setPaint(Color.RED);
         for(Point p : landmarks) {
-            graphics.fillOval((int)p.x, (int)p.y, 5, 5);
+            graphics.fillOval((int)p.x-10, (int)p.y-10, 20, 20);
         }
+        Particle p = filter.getBestParticle();
+        graphics.setPaint(Color.BLUE);
+        graphics.fillOval((int)p.x-5, (int)p.y-5, 10, 10);
+        p = filter.getAverageParticle();
+        graphics.setPaint(Color.GREEN);
+        graphics.fillOval((int)p.x-5, (int)p.y-5, 10, 10);
+        
         
         g.drawImage(image, 10, 40, rootPane);
         
