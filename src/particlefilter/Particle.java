@@ -20,6 +20,8 @@ public class Particle {
     public double probability = 0;
     public Point[] landmarks;
     Random gen;
+    
+    
 
     public Particle(Point[] landmarks, int width, int height) {
         gen = new Random();
@@ -62,7 +64,7 @@ public class Particle {
         float[] ret = new float[landmarks.length];
         
         for(int i=0;i<landmarks.length;i++){
-            float dist = (float) distance(x, landmarks[i].x, y, landmarks[i].y);
+            float dist = (float) distance(x, y, landmarks[i].x, landmarks[i].y);
             ret[i] = dist + (float)gen.nextGaussian() * senseNoise;
         }       
         return ret;
@@ -113,7 +115,7 @@ public class Particle {
 
     @Override
     public String toString() {
-        return "[x=" + x + " y=" + y + " orient=" + orientation + " prob=" +probability +  "]";
+        return "[x=" + x + " y=" + y + " orient=" + Math.toDegrees(orientation) + " prob=" +probability +  "]";
     }
     
     

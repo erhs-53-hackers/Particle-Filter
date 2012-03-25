@@ -5,6 +5,8 @@
 package particlefilter;
 
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -82,6 +84,30 @@ public class ParticleFilter {
         }
         return num;
     }
+    
+    public Particle getAverageParticle() {
+        Particle p = new Particle(particles[0].landmarks, particles[0].width, particles[0].height);
+        float x = 0, y = 0, orient = 0, prob = 0;
+        for(int i=0;i<numOfParticles;i++) {
+            x += particles[i].x;
+            y += particles[i].y;
+            orient += particles[i].orientation;
+            prob += particles[i].probability;
+        }
+        x /= numOfParticles;
+        y /= numOfParticles;
+        orient /= numOfParticles;
+        prob /= numOfParticles;
+        try {
+            p.set(x, y, orient, prob);
+        } catch (Exception ex) {
+            Logger.getLogger(ParticleFilter.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        p.setNoise(particles[0].forwardNoise, particles[0].turnNoise, particles[0].senseNoise);
+        
+        return p;
+    }
 
     @Override
     public String toString() {
@@ -91,63 +117,10 @@ public class ParticleFilter {
         }
         return res;
     }
-
-    public static double Gaussian(double mu, double sigma, double x) {
-        return Math.exp(-(Math.pow(mu - x, 2)) / Math.pow(sigma, 2) / 2.0) / Math.sqrt(2.0 * Math.PI * Math.pow(sigma, 2));
-    }
     
 
-    public static void main(String[] args) throws Exception {
-        
+    
+    
 
-        Point[] landmarks = new Point[]{new Point(20f, 20f), new Point(80f, 80f), new Point(20f, 80f), new Point(80f, 20f)};
-        
-      
-        float[] Z = new float[]{0, 84.8528f, 60, 60};
-        System.out.println("Starting");
-        ParticleFilter filter = new ParticleFilter(1000, landmarks, 100, 100);
-        filter.setNoise(0.05f,  0.05f, 5f);
-        
-        //filter.move(.1f, 5f);
-        
-        System.out.println("sample...");
-        filter.resample(Z);
-        System.out.println(filter.toString());
-        filter.setNoise(0.05f,  0.05f, 5f);
-        filter.move(0f, 5f);
-        
-        System.out.println("-----------");
-        System.out.println("-----------");
-        System.out.println("-----------");
-        System.out.println("-----------");
-        System.out.println("-----------");
-        System.out.println(filter.toString());
-        
-        System.out.println("done!");
-
-        
-
-        System.out.println("-----------");
-        System.out.println("-----------");
-        System.out.println("-----------");
-        System.out.println("-----------");
-        System.out.println("-----------");
-        System.out.println("best: "
-                + filter.getBestParticle().toString());
-               
-                
-        
-
-
-
-
-
-
-
-
-
-
-
-
-    }
+    
 }
