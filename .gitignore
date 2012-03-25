@@ -6,3 +6,4 @@
 *.nblh~
 /build/
 
+/dist/
