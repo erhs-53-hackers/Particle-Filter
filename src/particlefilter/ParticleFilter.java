@@ -1,5 +1,6 @@
 package particlefilter;
 
+import java.math.MathContext;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -43,6 +44,15 @@ public class ParticleFilter {
             }
         }
         return particle;
+    }
+    
+    public Particle[] getBestParticles() {
+        Particle[] bestParticles = new Particle[numOfParticles];
+        for(int i = 0; i < numOfParticles; i++) {
+            
+        }
+        
+        return bestParticles;
     }
 
     public void resample(float[] measurement) throws Exception {

@@ -10,12 +10,12 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author Michael
+ * @author Michael, Nick
  */
 public class GUI extends javax.swing.JFrame {
     
     ParticleFilter filter;
-    Particle robot;
+    Robot robot;
     Point[] landmarks = new Point[]{new Point(5, 20f), new Point(225, 40f), new Point(225f, 400f), new Point(5f, 80f), new Point(700-10f,40f)};
     private Image image;
     private Graphics2D graphics;
@@ -27,7 +27,7 @@ public class GUI extends javax.swing.JFrame {
         graphics = (Graphics2D)image.getGraphics();
         filter = new ParticleFilter(2000, landmarks, width, height);
         filter.setNoise(0.05f, 0.05f, 5f);
-        robot = new Particle(landmarks, width, height);
+        robot = new Robot(landmarks, width, height);
         graphics.drawRect(0, 0, width-1, height-1);
         
     }
@@ -56,13 +56,18 @@ public class GUI extends javax.swing.JFrame {
         for(Point p : landmarks) {
             graphics.fillOval((int)p.x-10, (int)p.y-10, 20, 20);
         }
+        graphics.setPaint(Color.YELLOW);
+        graphics.fillOval((int)robot.x-2, (int)robot.y-2, 4, 4);
+        /*
         Particle p = filter.getBestParticle();
         graphics.setPaint(Color.BLUE);
         graphics.fillOval((int)p.x-5, (int)p.y-5, 10, 10);
+        */
+        /*
         p = filter.getAverageParticle();
         graphics.setPaint(Color.GREEN);
         graphics.fillOval((int)p.x-5, (int)p.y-5, 10, 10);
-        
+        */
         
         g.drawImage(image, 10, 40, rootPane);
     }
@@ -209,6 +214,7 @@ public class GUI extends javax.swing.JFrame {
         float turn = (float)Math.toRadians(Float.parseFloat(jTextField2.getText()));
         try {
             filter.move(turn, move);
+            filter.resample(robot.sense());
         } catch (Exception ex) {
             Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
         }
