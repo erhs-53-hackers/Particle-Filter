@@ -1,10 +1,5 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package particlefilter;
 
-import com.sun.java_cup.internal.runtime.Symbol;
 import java.util.Random;
 
 /**
@@ -12,6 +7,7 @@ import java.util.Random;
  * @author Michael
  */
 public class Particle {
+    
     public float orientation, forwardNoise, turnNoise, senseNoise;
     public float x, y;
     public int width;
@@ -21,8 +17,6 @@ public class Particle {
     public Point[] landmarks;
     Random gen;
     
-    
-
     public Particle(Point[] landmarks, int width, int height) {
         gen = new Random();
         this.landmarks = landmarks;
@@ -117,11 +111,5 @@ public class Particle {
     public String toString() {
         return "[x=" + x + " y=" + y + " orient=" + Math.toDegrees(orientation) + " prob=" +probability +  "]";
     }
-    
-    
-    
-    
-    
-    
     
 }

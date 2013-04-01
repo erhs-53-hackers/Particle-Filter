@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package particlefilter;
 
 import java.awt.Color;
@@ -11,13 +7,13 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import sun.awt.image.OffScreenImage;
 
 /**
  *
  * @author Michael
  */
 public class GUI extends javax.swing.JFrame {
+    
     ParticleFilter filter;
     Particle robot;
     Point[] landmarks = new Point[]{new Point(5, 20f), new Point(225, 40f), new Point(225f, 400f), new Point(5f, 80f), new Point(700-10f,40f)};
@@ -29,29 +25,22 @@ public class GUI extends javax.swing.JFrame {
         image = new BufferedImage(width, height, BufferedImage.BITMASK);
         
         graphics = (Graphics2D)image.getGraphics();
-        filter = new ParticleFilter(30000, landmarks, width, height);
+        filter = new ParticleFilter(2000, landmarks, width, height);
         filter.setNoise(0.05f, 0.05f, 5f);
         robot = new Particle(landmarks, width, height);
         graphics.drawRect(0, 0, width-1, height-1);
         
     }
-    /**
-     * Creates new form GUI
-     */
+
     public GUI() {
-        
         setUp();
         initComponents();
-        
-        
     }
 
     @Override
     public void update(Graphics grphcs) {
         paint(grphcs);
     }
-    
-    
 
     @Override
     public void paint(Graphics g) {
@@ -76,7 +65,6 @@ public class GUI extends javax.swing.JFrame {
         
         
         g.drawImage(image, 10, 40, rootPane);
-        
     }
     
 

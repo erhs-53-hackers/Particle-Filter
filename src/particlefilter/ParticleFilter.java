@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package particlefilter;
 
 import java.util.Random;
@@ -14,9 +10,6 @@ import java.util.logging.Logger;
  */
 public class ParticleFilter {
 
-    /**
-     * @param args the command line arguments
-     */
     int numOfParticles = 0;
     Random gen = new Random();
     Particle[] particles;
@@ -117,10 +110,5 @@ public class ParticleFilter {
         }
         return res;
     }
-    
-
-    
-    
-
-    
+   
 }
