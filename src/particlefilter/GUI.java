@@ -15,8 +15,10 @@ import java.util.logging.Logger;
 public class GUI extends javax.swing.JFrame {
     
     ParticleFilter filter;
-    Robot robot;
-    Point[] landmarks = new Point[]{new Point(5, 20f), new Point(225, 40f), new Point(225f, 400f), new Point(5f, 80f), new Point(700-10f,40f)};
+    Particle robot;
+    Point[] landmarks = new Point[]{new Point(5, 20f), new Point(225, 40f), 
+                                    new Point(225f, 400f), new Point(5f, 80f), 
+                                    new Point(700-10f,40f), new Point(17f, 92f)};
     private Image image;
     private Graphics2D graphics;
     int width = 700, height = 500;
@@ -27,7 +29,7 @@ public class GUI extends javax.swing.JFrame {
         graphics = (Graphics2D)image.getGraphics();
         filter = new ParticleFilter(2000, landmarks, width, height);
         filter.setNoise(0.05f, 0.05f, 5f);
-        robot = new Robot(landmarks, width, height);
+        robot = new Particle(landmarks, width, height);
         graphics.drawRect(0, 0, width-1, height-1);
         
     }
@@ -38,29 +40,35 @@ public class GUI extends javax.swing.JFrame {
     }
 
     @Override
-    public void update(Graphics grphcs) {
-        paint(grphcs);
+    public void update(Graphics g) {
+        paint(g);
     }
 
     @Override
     public void paint(Graphics g) {
         super.paint(g);
+        /* Draw simulation environment ****************************************/
         graphics.clearRect(0, 0, width, height);
         graphics.setPaint(Color.white);
         graphics.drawRect(0, 0, width-1, height-1);
+        /* Draw all particles *************************************************/
         graphics.setPaint(Color.PINK);
         for(Particle p : filter.particles) {
             graphics.drawRect((int)p.x, (int)p.y, 1, 1);
         }
+        /* Draw all landmarks *************************************************/
         graphics.setPaint(Color.RED);
         for(Point p : landmarks) {
             graphics.fillOval((int)p.x-10, (int)p.y-10, 20, 20);
         }
+        /* Draw the robot *****************************************************/
         graphics.setPaint(Color.YELLOW);
         graphics.fillOval((int)robot.x-2, (int)robot.y-2, 4, 4);
+        /* Show the best particle *********************************************/
         Particle p = filter.getBestParticle();
         graphics.setPaint(Color.BLUE);
         graphics.fillOval((int)p.x-5, (int)p.y-5, 10, 10);
+        /* Show the average particle ******************************************/
         p = filter.getAverageParticle();
         graphics.setPaint(Color.GREEN);
         graphics.fillOval((int)p.x-5, (int)p.y-5, 10, 10);
@@ -68,7 +76,6 @@ public class GUI extends javax.swing.JFrame {
         g.drawImage(image, 10, 40, rootPane);
     }
     
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -131,37 +138,36 @@ public class GUI extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(jButton1))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(739, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jTextField1))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jTextField2)
-                            .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addContainerGap())
+                .addContainerGap(715, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(jLabel2)
+                            .addGap(16, 16, 16)
+                            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(jLabel1)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(jLabel1)
+                    .addComponent(jTextField1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 416, Short.MAX_VALUE)
+                .addGap(385, 385, 385)
                 .addComponent(jButton1))
         );
 

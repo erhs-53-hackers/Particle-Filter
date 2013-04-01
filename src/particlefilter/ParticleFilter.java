@@ -5,72 +5,49 @@ import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- *
- * @author Michael
- */
 public class ParticleFilter {
 
-    int numOfParticles = 0;
-    Random gen = new Random();
     Particle[] particles;
+    int numParticles = 0;
+    Random gen = new Random();
 
-    public ParticleFilter(int numOfParticles, Point[] landmarks, int width, int height) {
-        this.numOfParticles = numOfParticles;
+    public ParticleFilter(int numParticles, Point[] landmarks, int width, int height) {
+        this.numParticles = numParticles;
 
-        particles = new Particle[numOfParticles];
-        for (int i = 0; i < numOfParticles; i++) {
+        particles = new Particle[numParticles];
+        for (int i = 0; i < numParticles; i++) {
             particles[i] = new Particle(landmarks, width, height);
         }
     }
 
     public void setNoise(float Fnoise, float Tnoise, float Snoise) {
-        for (int i = 0; i < numOfParticles; i++) {
+        for (int i = 0; i < numParticles; i++) {
             particles[i].setNoise(Fnoise, Tnoise, Snoise);
         }
     }
 
     public void move(float turn, float forward) throws Exception {
-        for (int i = 0; i < numOfParticles; i++) {
+        for (int i = 0; i < numParticles; i++) {
             particles[i].move(turn, forward);
         }
     }
 
-    public Particle getBestParticle() {
-        Particle particle = particles[0];
-        for (int i = 0; i < numOfParticles; i++) {
-            if (particles[i].probability > particle.probability) {
-                particle = particles[i];
-            }
-        }
-        return particle;
-    }
-    
-    public Particle[] getBestParticles() {
-        Particle[] bestParticles = new Particle[numOfParticles];
-        for(int i = 0; i < numOfParticles; i++) {
-            
-        }
-        
-        return bestParticles;
-    }
-
     public void resample(float[] measurement) throws Exception {
-        Particle[] new_particles = new Particle[numOfParticles];
+        Particle[] new_particles = new Particle[numParticles];
 
-        for (int i = 0; i < numOfParticles; i++) {
+        for (int i = 0; i < numParticles; i++) {
             particles[i].measurementProb(measurement);
         }
         float B = 0f;
         Particle best = getBestParticle();
-        int index = (int) gen.nextFloat() * numOfParticles;
-        for (int i = 0; i < numOfParticles; i++) {
+        int index = (int) gen.nextFloat() * numParticles;
+        for (int i = 0; i < numParticles; i++) {
             B += gen.nextFloat() * 2f * best.probability;
             while (B > particles[index].probability) {
                 B -= particles[index].probability;
-                index = circle(index + 1, numOfParticles);
+                index = circle(index + 1, numParticles);
             }
-            new_particles[i] = new Particle(particles[index].landmarks, particles[index].width, particles[index].height);
+            new_particles[i] = new Particle(particles[index].landmarks, particles[index].worldWidth, particles[index].worldHeight);
             new_particles[i].set(particles[index].x, particles[index].y, particles[index].orientation, particles[index].probability);
             new_particles[i].setNoise(particles[index].forwardNoise, particles[index].turnNoise, particles[index].senseNoise);
         }
@@ -88,19 +65,29 @@ public class ParticleFilter {
         return num;
     }
     
+    public Particle getBestParticle() {
+        Particle particle = particles[0];
+        for (int i = 0; i < numParticles; i++) {
+            if (particles[i].probability > particle.probability) {
+                particle = particles[i];
+            }
+        }
+        return particle;
+    }
+    
     public Particle getAverageParticle() {
-        Particle p = new Particle(particles[0].landmarks, particles[0].width, particles[0].height);
+        Particle p = new Particle(particles[0].landmarks, particles[0].worldWidth, particles[0].worldHeight);
         float x = 0, y = 0, orient = 0, prob = 0;
-        for(int i=0;i<numOfParticles;i++) {
+        for(int i=0;i<numParticles;i++) {
             x += particles[i].x;
             y += particles[i].y;
             orient += particles[i].orientation;
             prob += particles[i].probability;
         }
-        x /= numOfParticles;
-        y /= numOfParticles;
-        orient /= numOfParticles;
-        prob /= numOfParticles;
+        x /= numParticles;
+        y /= numParticles;
+        orient /= numParticles;
+        prob /= numParticles;
         try {
             p.set(x, y, orient, prob);
         } catch (Exception ex) {
@@ -115,7 +102,7 @@ public class ParticleFilter {
     @Override
     public String toString() {
         String res = "";
-        for (int i = 0; i < numOfParticles; i++) {
+        for (int i = 0; i < numParticles; i++) {
             res += particles[i].toString() + "\n";
         }
         return res;
