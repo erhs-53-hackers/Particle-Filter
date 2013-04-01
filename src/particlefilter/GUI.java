@@ -16,21 +16,23 @@ public class GUI extends javax.swing.JFrame {
     
     ParticleFilter filter;
     Particle robot;
-    Point[] landmarks = new Point[]{new Point(5, 20f), new Point(225, 40f), 
-                                    new Point(225f, 400f), new Point(5f, 80f), 
-                                    new Point(700-10f,40f), new Point(17f, 92f)};
+    final Point[] landmarks = new Point[]{new Point(5, 20f), new Point(225, 40f), 
+                                          new Point(225f, 400f), new Point(5f, 80f), 
+                                          new Point(700-10f,40f), new Point(17f, 92f)};
+    final int NUM_PARTICLES = 2000; 
+    final int WORLD_WIDTH = 700, WORLD_HEIGHT = 500;
+    
     private Image image;
     private Graphics2D graphics;
-    int width = 700, height = 500;
 
     private void setUp() {
-        image = new BufferedImage(width, height, BufferedImage.BITMASK);
+        image = new BufferedImage(WORLD_WIDTH, WORLD_HEIGHT, BufferedImage.BITMASK);
         
         graphics = (Graphics2D)image.getGraphics();
-        filter = new ParticleFilter(2000, landmarks, width, height);
+        filter = new ParticleFilter(NUM_PARTICLES, landmarks, WORLD_WIDTH, WORLD_HEIGHT);
         filter.setNoise(0.05f, 0.05f, 5f);
-        robot = new Particle(landmarks, width, height);
-        graphics.drawRect(0, 0, width-1, height-1);
+        robot = new Particle(landmarks, WORLD_WIDTH, WORLD_HEIGHT);
+        graphics.drawRect(0, 0, WORLD_WIDTH-1, WORLD_HEIGHT-1);
         
     }
 
@@ -48,9 +50,9 @@ public class GUI extends javax.swing.JFrame {
     public void paint(Graphics g) {
         super.paint(g);
         /* Draw simulation environment ****************************************/
-        graphics.clearRect(0, 0, width, height);
+        graphics.clearRect(0, 0, WORLD_WIDTH, WORLD_HEIGHT);
         graphics.setPaint(Color.white);
-        graphics.drawRect(0, 0, width-1, height-1);
+        graphics.drawRect(0, 0, WORLD_WIDTH-1, WORLD_HEIGHT-1);
         /* Draw all particles *************************************************/
         graphics.setPaint(Color.PINK);
         for(Particle p : filter.particles) {
