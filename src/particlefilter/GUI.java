@@ -58,16 +58,12 @@ public class GUI extends javax.swing.JFrame {
         }
         graphics.setPaint(Color.YELLOW);
         graphics.fillOval((int)robot.x-2, (int)robot.y-2, 4, 4);
-        /*
         Particle p = filter.getBestParticle();
         graphics.setPaint(Color.BLUE);
         graphics.fillOval((int)p.x-5, (int)p.y-5, 10, 10);
-        */
-        /*
         p = filter.getAverageParticle();
         graphics.setPaint(Color.GREEN);
         graphics.fillOval((int)p.x-5, (int)p.y-5, 10, 10);
-        */
         
         g.drawImage(image, 10, 40, rootPane);
     }
@@ -213,6 +209,7 @@ public class GUI extends javax.swing.JFrame {
         float move = Float.parseFloat(jTextField1.getText());
         float turn = (float)Math.toRadians(Float.parseFloat(jTextField2.getText()));
         try {
+            robot.move(turn, move);
             filter.move(turn, move);
             filter.resample(robot.sense());
         } catch (Exception ex) {
